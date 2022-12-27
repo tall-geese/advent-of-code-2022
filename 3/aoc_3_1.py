@@ -15,18 +15,18 @@ def split_string(line: str)-> tuple[str, str]:
 def get_priority(char: str) -> int:
     return ord(char) - 96 if char.islower() else ord(char) - 38
 
+if __name__ == '__main__':
+    with open('input.txt', 'r') as file:
+        lines = file.read().split('\n')  # b/c readlines() wont get rid of the \n character
 
-with open('input.txt', 'r') as file:
-    lines = file.read().split('\n')  # b/c readlines() wont get rid of the \n character
+    priorities = []
 
-priorities = []
+    for line in lines:
+        alpha, omega = split_string(line)
+        for char in line:
+            if char in alpha and char in omega: # if a single character appears in both sections
+                priorities.append(get_priority(char)) # add it to our list
+                break
 
-for line in lines:
-    alpha, omega = split_string(line)
-    for char in line:
-        if char in alpha and char in omega: # if a single character appears in both sections
-            priorities.append(get_priority(char)) # add it to our list
-            break
 
-print(priorities)
-print(sum(priorities))
+
