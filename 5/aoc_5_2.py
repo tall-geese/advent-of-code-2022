@@ -40,15 +40,14 @@ for ind, move in enumerate(moves):
     from_pile = int(from_pile); to_pile = int(to_pile); boxes = int(boxes)
     from_pile -= 1; to_pile -= 1  # b/c the lists are 0 indexed
 
+
+    # This time, if we are moving multiple boxes, we need to move them all
+        # at once, so that they retain their order
+        # Extend left puts them actually one at a time, so we need to reverse them
+    crates[to_pile].extendleft(list(crates[from_pile])[:boxes][::-1])
     for i in range(boxes):
-        try:
-            # print(f'\t {i} \t {from_pile} -> {to_pile}')
-            loot = crates[from_pile].popleft()
-            crates[to_pile].appendleft(loot)
-            # crates[to_pile].appendleft(crates[from_pile].popleft())
-        except Exception as e:
-            print(e)
-            quit()
+        crates[from_pile].popleft()
+
 
 # Print the first letter of each col
 for i in crates:
