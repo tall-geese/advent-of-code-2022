@@ -3,12 +3,10 @@
     This time there is the Head and 9 Knots trailing behind
     Needs to keep track of each unique place the 9th knot has visited
 
-
+    Guessed 650 - too low
+    2545 - doneski
 
 """
-
-from itertools import chain, pairwise
-
 
 
 def move_left(head) -> tuple[int, int]:
@@ -27,19 +25,19 @@ def update_tail_position(tail, head) -> tuple[int, int]:
     # we need to update(add) in that direction 1 (-/+)
         # sign is determined by dividing the distance by itself
 
-    # THEN if its still 1 away in the other coordinate, we need to
+    # THEN if its still at aleast 1 away in the other coordinate, we need to
     # udpate that one as well
 
     for i in [0, 1]:
         dist = head[i] - tail[i]
         if abs(dist) == 2:
-            far_assignment = tail[i] + (dist / abs(dist)) # gives neg or positive direction as needed
+            far_assignment = tail[i] + (dist / abs(dist)) # gives neg or positive direction as needed, increment by 1
             other_coord = 0 if i == 1 else 1
             close_assignment = tail[other_coord]
 
             dist = head[other_coord] - tail[other_coord]
-            if abs(dist) == 1:
-                close_assignment += dist
+            if abs(dist) >= 1:
+                close_assignment += (dist / abs(dist))  # same thing as above
 
             # Kinda became a mess towards the end
             return (far_assignment, close_assignment) if i == 0 else (close_assignment, far_assignment)
@@ -80,15 +78,15 @@ def main():
         for i in range(0, int(spaces)):  # moving in the direction a given number of times
             tails[0] = move_func(tails[0])
             # head = move_func(head)  # move the head
-            i = 0
             # print(list(pairwise([head, *tails])))
-            for header, follower in list(pairwise([head, *tails])):
-                tail = update_tail_position(follower, header)
-                tails[i] = tail
-                i += 1
+            for ind, tail in enumerate(tails):
+                if ind + 1 == len(tails): 
+                    break
+                tail = update_tail_position(tails[ind + 1], tails[ind])
+                tails[ind + 1] = tail
 
             # tail = update_tail_position(tail, head)
-            history.add(tails[-1])
+            history.add(tails[-1])  # the last in the list is tail-9
 
     print(history)
     print(len(history))
