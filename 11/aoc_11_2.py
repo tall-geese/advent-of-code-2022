@@ -1,26 +1,25 @@
 """
 
-Monkeys start with a list of a items that have a integer value indicating the worrieness level.
-When inspecting an item, monkey will peform the Operation, usually increaing the worry level
-After each monkey performs the operation on an item, but before testing...
-    divide the worriness by 3 and math.floor() it
 
-Then the monkey runs a test on an item
-It will throw to another monkey in which case
-that item is appended onto the end of the list for that monkey
+Psuedo
+--------
+We can continually multiple the number by 0.1
+until it is within a rnage of >50 and < 100
+or something like that and then performthe modulus operation.
 
-In each round we iterate through each monkey
-which iterates through each item that it has on hand, before moving
-to the next monkey once its out of items
+This is hoping that the multiplication is not an expensive operation
+in programming
 
 
-Count the total number of times each monkey inspected an item over 20 rounds.
-Multiply the score of the two highest monkeys together to ge the "level"
+Guessed
+----------
+14400720009 - too low
+14400359996 - too low
+21800916620 - good
 
-What is the level of monkey business AFTER 20 rounds of stuff-slinging simian shenanigans?
 """
 
-from monkeys import monkey_json
+from monkeys2 import monkey_json, lcm
 import math
 
 def main():
@@ -30,12 +29,15 @@ def main():
     for monkey in monkey_json:
         monkey.update({'inspections': 0})
 
-    for i in range(20):
+    for i in range(10000):
         for ind, monkey in enumerate(monkey_json):
             for item in monkey['items']:
                 monkey['inspections'] += 1
                 item = monkey['operation'](item)
-                item = math.floor(item / 3)
+                item = item % lcm
+                # if item >= 200 and item % 10 == 0:
+                #     item /= 10
+                # item = math.floor(item / 3)
                 monkey_json[monkey['test'](item)]['items'].append(item)
 
                 monkey['items'] = []
